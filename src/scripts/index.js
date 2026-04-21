@@ -1,14 +1,20 @@
-/*
-  Файл index.js является точкой входа в наше приложение
-  и только он должен содержать логику инициализации нашего приложения
-  используя при этом импорты из других файлов
-
-  Из index.js не допускается что то экспортировать
-*/
-
 import { initialCards } from "./cards.js";
 import { createCardElement, deleteCard, likeCard } from "./components/card.js";
 import { openModalWindow, closeModalWindow, setCloseModalWindowEventListeners } from "./components/modal.js";
+import { enableValidation, clearValidation } from "./components/validation.js";
+
+// Настройки валидации
+const validationSettings = {
+  formSelector: ".popup__form",
+  inputSelector: ".popup__input",
+  submitButtonSelector: ".popup__button",
+  inactiveButtonClass: "popup__button_disabled",
+  inputErrorClass: "popup__input_type_error",
+  errorClass: "popup__error_visible",
+};
+
+// Включаем валидацию для всех форм
+enableValidation(validationSettings);
 
 // DOM узлы
 const placesWrap = document.querySelector(".places__list");
@@ -55,6 +61,8 @@ const handleAvatarFromSubmit = (evt) => {
   evt.preventDefault();
   profileAvatar.style.backgroundImage = `url(${avatarInput.value})`;
   closeModalWindow(avatarFormModalWindow);
+  avatarForm.reset();
+  clearValidation(avatarForm, validationSettings);
 };
 
 const handleCardFormSubmit = (evt) => {
@@ -74,6 +82,8 @@ const handleCardFormSubmit = (evt) => {
   );
 
   closeModalWindow(cardFormModalWindow);
+  cardForm.reset();
+  clearValidation(cardForm, validationSettings);
 };
 
 // EventListeners
@@ -84,16 +94,26 @@ avatarForm.addEventListener("submit", handleAvatarFromSubmit);
 openProfileFormButton.addEventListener("click", () => {
   profileTitleInput.value = profileTitle.textContent;
   profileDescriptionInput.value = profileDescription.textContent;
+
+  // Сбрасываем ошибки и отключаем кнопку
+  clearValidation(profileForm, validationSettings);
+
+  // Искусственно вызываем события input, чтобы валидация проверила заполненные поля и активировала кнопку
+  profileTitleInput.dispatchEvent(new Event('input'));
+  profileDescriptionInput.dispatchEvent(new Event('input'));
+
   openModalWindow(profileFormModalWindow);
 });
 
 profileAvatar.addEventListener("click", () => {
   avatarForm.reset();
+  clearValidation(avatarForm, validationSettings);
   openModalWindow(avatarFormModalWindow);
 });
 
 openCardFormButton.addEventListener("click", () => {
   cardForm.reset();
+  clearValidation(cardForm, validationSettings);
   openModalWindow(cardFormModalWindow);
 });
 
