@@ -1,12 +1,12 @@
 {
   "name": "mesto-ad",
   "version": "1.0.0",
-  "description": "Стартовый набор для выполнения проектной работы Место",
-  "main": "index.js",
+  "description": "Проектная работа Mesto. Работа с сервером",
+  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "deploy": "vite build && gh-pages -d dist"
   },
   "repository": {
     "type": "git",
@@ -15,12 +15,12 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
   "bugs": {
     "url": "https://github.com/victor1794/mesto-ad/issues"
   },
-  "homepage": "https://github.com/victor1794/mesto-ad#readme",
+  "homepage": "https://victor1794.github.io/mesto-ad/",
   "devDependencies": {
+    "gh-pages": "^6.3.0",
     "vite": "^8.0.9"
   }
 }
